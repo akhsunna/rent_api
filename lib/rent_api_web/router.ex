@@ -16,8 +16,9 @@ defmodule RentApiWeb.Router do
 
      get "/", HomeController, :index
 
-     resources "/users", UserController, only: [:create]
      post "/auth_token", UserController, :auth
+     resources "/users", UserController, only: [:create]
+     resources "/items", ItemController, only: [:show]
    end
 
    scope "/api/v1", RentApiWeb do

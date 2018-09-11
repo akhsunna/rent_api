@@ -41,6 +41,5 @@ defmodule RentApi.AccountsTest do
     test "create_user/2 with invalid email returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Accounts.create_user(%{email: "mail", password: "123123123"})
     end
-
   end
 end

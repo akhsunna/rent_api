@@ -18,7 +18,7 @@ defmodule RentApi.Stuff do
 
   def get_item(id) do
     Repo.get(Item, id)
-    |> Repo.preload([:owner])
+    |> Repo.preload([:owner, :category])
   end
 
   def create_item(user, attrs) do

@@ -54,7 +54,7 @@ defmodule RentApi.StuffTest do
 
     test "get_item/1 returns the item with given id" do
       item = item_fixture()
-      assert Stuff.get_item(item.id) == Repo.preload(item, [:owner])
+      assert Stuff.get_item(item.id) == Repo.preload(item, [:owner, :category])
     end
 
     test "create_item/2 creates the new item" do
