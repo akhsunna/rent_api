@@ -10,20 +10,20 @@ defmodule RentApi.Accounts.User do
     has_many :items, RentApi.Stuff.Item, foreign_key: :owner_id, on_delete: :delete_all
 
     field :password, :string, virtual: true
-    field :password_confirmation, :string, virtual: true
 
     timestamps()
   end
 
   def changeset(user, attrs) do
+    required_fields = if user.id do [:email] else [:email, :password] end
+
     user
-    |> cast(attrs, [:email, :password, :password_confirmation]) # Remove hash, add pw + pw confirmation
-    |> validate_required([:email, :password, :password_confirmation]) # Remove hash, add pw + pw confirmation
-    |> validate_format(:email, ~r/@/) # Check that email is valid
-    |> validate_length(:password, min: 8) # Check that password length is >= 8
-    |> validate_confirmation(:password) # Check that password === password_confirmation
+    |> cast(attrs, [:email, :password])
+    |> validate_required(required_fields)
+    |> validate_format(:email, ~r/@/)
+    |> validate_length(:password, min: 8)
     |> unique_constraint(:email)
-    |> put_password_hash # Add put_password_hash to changeset pipeline
+    |> put_password_hash
   end
 
   defp put_password_hash(changeset) do

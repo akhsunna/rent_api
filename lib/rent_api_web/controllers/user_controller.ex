@@ -17,10 +17,10 @@ defmodule RentApiWeb.UserController do
 
   def show(conn, _params) do
     user = Guardian.Plug.current_resource(conn)
-    conn |> render("user.json", user: user)
+    conn |> render("show.json", user: user)
   end
 
-  def update(conn, user_params) do
+  def update(conn, %{"user" => user_params}) do
     user = Guardian.Plug.current_resource(conn)
 
     with {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do

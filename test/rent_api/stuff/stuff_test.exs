@@ -19,8 +19,7 @@ defmodule RentApi.StuffTest do
     with nil <- RentApi.Repo.one(User),
          {:ok, %User{} = user} <- RentApi.Repo.insert(%User{
            email: "test@mail.com",
-           password: "123123123",
-           password_confirmation: "123123123"
+           password: "123123123"
          }) do
       user
     end
