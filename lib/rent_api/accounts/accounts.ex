@@ -11,11 +11,13 @@ defmodule RentApi.Accounts do
 
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
-  def list_users do
+  def get_users_list do
     Repo.all(User)
   end
 
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id) do
+    Repo.get!(User, id)
+  end
 
   def create_user(attrs \\ %{}) do
     %User{}
@@ -31,10 +33,6 @@ defmodule RentApi.Accounts do
 
   def delete_user(%User{} = user) do
     Repo.delete(user)
-  end
-
-  def change_user(%User{} = user) do
-    User.changeset(user, %{})
   end
 
   def token_sign_in(email, password) do
