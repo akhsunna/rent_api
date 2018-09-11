@@ -1,11 +1,10 @@
-# Script for populating the database. You can run it as:
-#
-#     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     RentApi.Repo.insert!(%RentApi.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
+# Script for populating the database.
+# You can run it as: mix run priv/repo/seeds.exs
+
+RentApi.Repo.insert!(%RentApi.Staff.Category{name: "Bicycle"})
+
+RentApi.Repo.insert!(%RentApi.Accounts.User{
+  email: "anna@mail.com",
+  password: "123123123",
+  password_confirmation: "123123123"
+})

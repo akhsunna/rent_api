@@ -7,13 +7,14 @@ defmodule RentApi.Accounts.User do
     field :email, :string
     field :password_hash, :string
 
+    has_many :items, RentApi.Stuff.Item, foreign_key: :owner_id, on_delete: :delete_all
+
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
 
     timestamps()
   end
 
-  @doc false
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:email, :password, :password_confirmation]) # Remove hash, add pw + pw confirmation
