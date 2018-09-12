@@ -15,7 +15,7 @@ defmodule RentApi.Accounts.User do
   end
 
   def changeset(user, attrs) do
-    required_fields = if user.id do [:email] else [:email, :password] end
+    required_fields = if user.id, do: [:email], else: [:email, :password]
 
     user
     |> cast(attrs, [:email, :password])

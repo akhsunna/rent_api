@@ -48,4 +48,20 @@ defmodule RentApiWeb.ItemControllerTest do
       assert Poison.encode!(json_response(conn, 200)["item"]) == Poison.encode!(ItemView.render("item.json", item: item))
     end
   end
+
+  describe "list items" do
+    test "renders list of all items", %{conn: conn} do
+      Stuff.create_item(user_fixture(), item_attrs())
+
+      conn = get conn, item_path(conn, :index)
+      assert length(json_response(conn, 200)["items"]) == 1
+    end
+
+    test "renders list of filtered items", %{conn: conn} do
+      Stuff.create_item(user_fixture(), item_attrs())
+
+      conn = get conn, item_path(conn, :index, %{category_ids: [0], name: "test"})
+      assert length(json_response(conn, 200)["items"]) == 0
+    end
+  end
 end

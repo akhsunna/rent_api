@@ -9,4 +9,11 @@ defmodule RentApiWeb.ItemController do
     item = Stuff.get_item(id)
     render(conn, "show.json", item: item)
   end
+
+  def index(conn, params) do
+    items = Item
+            |> Stuff.apply_item_filters(params)
+            |> Stuff.get_items_list_with_owners
+    render(conn, "index.json", items: items)
+  end
 end

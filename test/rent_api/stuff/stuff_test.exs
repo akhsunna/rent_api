@@ -1,6 +1,6 @@
 defmodule RentApi.StuffTest do
   use RentApi.DataCase
-
+  import RentApi.Factory
   alias RentApi.Stuff
   alias RentApi.Accounts.User
 

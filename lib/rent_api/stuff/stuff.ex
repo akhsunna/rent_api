@@ -5,6 +5,7 @@ defmodule RentApi.Stuff do
 
   import Ecto.Query, warn: false
   alias RentApi.Repo
+  alias RentApi.Stuff.ItemFilter
 
   alias RentApi.Stuff.{Item, Category}
 
@@ -12,8 +13,19 @@ defmodule RentApi.Stuff do
     Repo.all(Category)
   end
 
-  def get_items_list do
-    Repo.all(Item)
+  def get_items_list(query \\ Item) do
+    Repo.all(query)
+  end
+
+  def get_items_list_with_owners(query \\ Item) do
+    Repo.all(query)
+    |> Repo.preload([:owner])
+  end
+
+  def apply_item_filters(query, params) do
+    query
+    |> ItemFilter.by_name(params)
+    |> ItemFilter.by_category(params)
   end
 
   def get_item(id) do
