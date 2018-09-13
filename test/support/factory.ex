@@ -22,4 +22,15 @@ defmodule RentApi.Factory do
       owner: build(:user),
     }
   end
+
+  def booking_factory do
+    start_date = ~D[2019-01-01]
+    end_date = ~D[2019-02-01]
+    %RentApi.Rent.Booking{
+      start_date: start_date,
+      end_date: end_date,
+      item: build(:item),
+      user: build(:user),
+    }
+  end
 end

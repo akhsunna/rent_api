@@ -23,7 +23,7 @@ defmodule RentApi.Accounts.User do
     |> validate_format(:email, ~r/@/)
     |> validate_length(:password, min: 8)
     |> unique_constraint(:email)
-    |> put_password_hash
+    |> put_password_hash()
   end
 
   defp put_password_hash(changeset) do
