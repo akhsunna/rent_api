@@ -28,14 +28,22 @@ defmodule RentApi.Stuff do
     |> ItemFilter.by_category(params)
   end
 
-  def get_item(id) do
+  def get_item_with_owner(id) do
     Repo.get(Item, id)
     |> Repo.preload([:owner, :category])
+  end
+
+  def get_item(id) do
+    Repo.get(Item, id)
   end
 
   def create_item(user, attrs) do
     Ecto.build_assoc(user, :items)
     |> Item.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def delete_item(item) do
+    Repo.delete(item)
   end
 end

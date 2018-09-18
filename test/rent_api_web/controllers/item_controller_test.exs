@@ -4,14 +4,14 @@ defmodule RentApiWeb.ItemControllerTest do
   import RentApi.Factory
   alias RentApi.Guardian
 
-  alias RentApi.{Stuff, Stuff.Item, Stuff.Category}
-  alias RentApi.{Accounts, Accounts.User}
+  alias RentApi.{Stuff}
   alias RentApiWeb.ItemView
 
   @doc false
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
+    {:ok, conn: put_req_header(conn, "content-type", "application/json")}
   end
 
   describe "show item" do
@@ -53,6 +53,22 @@ defmodule RentApiWeb.ItemControllerTest do
     test "renders errors when params are invalid", %{conn: conn} do
       conn = post conn, item_path(conn, :create), item: %{name: "New Item"}
       refute json_response(conn, 422)["errors"] == %{}
+    end
+  end
+
+  describe "delete item" do
+    setup [:add_auth_header]
+
+    test "deletes item when it belongs to current user", %{conn: conn, current_user: current_user} do
+      item = insert(:item, %{owner: current_user})
+      delete conn, item_path(conn, :delete, item)
+      assert Stuff.get_item(item.id) == nil
+    end
+
+    test "renders error if item does not belong to current user", %{conn: conn} do
+      item = insert(:item)
+      conn = delete conn, item_path(conn, :delete, item)
+      assert conn.status == 403
     end
   end
 
