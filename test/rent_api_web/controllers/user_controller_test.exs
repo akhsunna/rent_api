@@ -1,6 +1,7 @@
 defmodule RentApiWeb.UserControllerTest do
   use RentApiWeb.ConnCase
 
+  import RentApi.Factory
   alias RentApi.Guardian
 
   alias RentApi.Accounts

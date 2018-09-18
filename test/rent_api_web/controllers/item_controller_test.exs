@@ -1,37 +1,12 @@
 defmodule RentApiWeb.ItemControllerTest do
   use RentApiWeb.ConnCase
 
+  import RentApi.Factory
+  alias RentApi.Guardian
+
   alias RentApi.{Stuff, Stuff.Item, Stuff.Category}
   alias RentApi.{Accounts, Accounts.User}
   alias RentApiWeb.ItemView
-
-  @user_attrs %{email: "create@mail.com", password: "123123123"}
-
-  @doc false
-
-  def user_fixture do
-    with nil <- RentApi.Repo.get_by(User, email: @user_attrs.email),
-         {:ok, %User{} = user} <- Accounts.create_user(@user_attrs) do
-      user
-    end
-  end
-
-  def category_fixture do
-    with nil <- RentApi.Repo.one(Category),
-         {:ok, %Category{} = category} <- RentApi.Repo.insert!(%Category{name: "Test"}) do
-      category
-    end
-  end
-
-  def item_attrs(status \\ :create) do
-    case status do
-      :create ->
-        %{name: "New Item", category_id: category_fixture().id}
-      :update ->
-        %{name: "Item", category_id: category_fixture().id}
-      _ -> %{}
-    end
-  end
 
   @doc false
 
@@ -41,7 +16,8 @@ defmodule RentApiWeb.ItemControllerTest do
 
   describe "show item" do
     test "renders particuler item", %{conn: conn} do
-      {:ok, item} = Stuff.create_item(user_fixture(), item_attrs())
+      item = insert(:item)
+
       item = RentApi.Repo.preload(item, [:owner, :category])
       conn = get conn, item_path(conn, :show, item.id)
       # TODO: improve it! (keys as strings vs keys as atoms)
@@ -51,17 +27,38 @@ defmodule RentApiWeb.ItemControllerTest do
 
   describe "list items" do
     test "renders list of all items", %{conn: conn} do
-      Stuff.create_item(user_fixture(), item_attrs())
+      insert(:item)
 
       conn = get conn, item_path(conn, :index)
       assert length(json_response(conn, 200)["items"]) == 1
     end
 
     test "renders list of filtered items", %{conn: conn} do
-      Stuff.create_item(user_fixture(), item_attrs())
+      insert(:item)
 
       conn = get conn, item_path(conn, :index, %{category_ids: [0], name: "test"})
       assert length(json_response(conn, 200)["items"]) == 0
     end
+  end
+
+  describe "create item" do
+    setup [:add_auth_header]
+
+    test "creates item when params are valid", %{conn: conn} do
+      category = insert(:category)
+      conn = post conn, item_path(conn, :create), item: %{name: "New Item", category_id: category.id}
+      refute json_response(conn, 200)["item"] == nil
+    end
+
+    test "renders errors when params are invalid", %{conn: conn} do
+      conn = post conn, item_path(conn, :create), item: %{name: "New Item"}
+      refute json_response(conn, 422)["errors"] == %{}
+    end
+  end
+
+  defp add_auth_header %{conn: conn} do
+    current_user = insert(:user)
+    {:ok, token, _} = Guardian.encode_and_sign(current_user, %{}, token_type: :access)
+    {:ok, conn: put_req_header(conn, "authorization", "bearer: " <> token), current_user: current_user}
   end
 end

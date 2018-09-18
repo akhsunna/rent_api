@@ -14,7 +14,7 @@ defmodule RentApiWeb.ItemView do
     %{id: item.id,
       name: item.name,
       category_name: (if Ecto.assoc_loaded?(item.category), do: item.category.name, else: nil),
-      owner: render_one(item.owner, UserView, "user.json")
+      owner: (if Ecto.assoc_loaded?(item.owner), do: render_one(item.owner, UserView, "user.json"), else: nil),
     }
   end
 end

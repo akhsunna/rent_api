@@ -25,5 +25,6 @@ defmodule RentApiWeb.Router do
      pipe_through [:api, :jwt_authenticated]
 
      resources "/users", UserController, only: [:show, :update]
+     resources "/items", ItemController, only: [:create]
    end
 end
