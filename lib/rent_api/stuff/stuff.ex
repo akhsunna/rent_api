@@ -26,6 +26,7 @@ defmodule RentApi.Stuff do
     query
     |> ItemFilter.by_name(params)
     |> ItemFilter.by_category(params)
+    |> ItemFilter.available(params)
   end
 
   def get_item_with_owner(id) do
