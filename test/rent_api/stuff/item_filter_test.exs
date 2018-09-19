@@ -43,10 +43,12 @@ defmodule RentApi.ItemFilterTest do
       item_4 = insert(:item)
       insert(:booking, %{item: item_4, start_date: ~D[2019-03-01], end_date: ~D[2019-05-01]})
 
-      available_item = insert(:item)
-      insert(:booking, %{item: available_item, start_date: ~D[2019-01-01], end_date: ~D[2019-01-20]})
+      available_item_1 = insert(:item)
+      insert(:booking, %{item: available_item_1, start_date: ~D[2019-01-01], end_date: ~D[2019-01-20]})
 
-      answer = [available_item] |> Enum.map(& &1.id)
+      available_item_2 = insert(:item)
+
+      answer = [available_item_1, available_item_2] |> Enum.map(& &1.id)
 
       result_1 = Repo.all(ItemFilter.available(Item, %{start_date: "2019-02-01", end_date: "2019-04-01"}))
                |> Enum.map(& &1.id)
