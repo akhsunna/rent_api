@@ -19,6 +19,7 @@ defmodule RentApiWeb.Router do
      post "/auth_token", UserController, :auth
      resources "/users", UserController, only: [:create]
      resources "/items", ItemController, only: [:show, :index]
+     resources "/passwords", PasswordController, only: [:create, :update], param: "token"
    end
 
    scope "/api/v1", RentApiWeb do

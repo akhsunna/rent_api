@@ -29,3 +29,13 @@ import_config "#{Mix.env}.exs"
 config :rent_api, RentApi.Guardian,
        issuer: "myApi",
        secret_key: "KrZgimMUle4Q4whHwuElevsxkZmNRlZENSSjayg25IHtuxC2VJtKV8Iw3/bFt733"
+
+config :rent_api, RentApi.Mailer,
+       adapter: Bamboo.SMTPAdapter,
+       server: "smtp.mailtrap.io",
+       hostname: "smtp.mailtrap.io",
+       port: 2525,
+       username: "677798a2cd3527",
+       password: "c52e40cfb746bf",
+       tls: :if_available,
+       auth: :always

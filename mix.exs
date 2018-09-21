@@ -42,6 +42,8 @@ defmodule RentApi.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
 
+      {:bamboo, "~> 1.1"},
+      {:bamboo_smtp, "~> 1.6.0"},
       {:bcrypt_elixir, "~> 1.0"},
       {:comeonin, "~> 4.0"},
       {:ex_machina, "~> 2.2", only: :test},
